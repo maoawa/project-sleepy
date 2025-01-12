@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: rgba(20, 20, 20, 0.95); /* 调暗背景颜色 */
+    color: white; /* 设置默认文字颜色为白色 */
+}
+
+h1, h2, h3 {
+    color: white; /* 标题文字颜色为白色 */
+}
+
+/*MOBILE*/
+@media screen and (orientation: portrait) {
+    body {
+        background-image: url('https://api.maao.cc/paimon?p=1');
+    }
+    .container {
+        width: 90vw;
+        max-width: 600px;
+        min-width: 280px;
+        margin: 5vh auto;
+    }
+}
+
+/*DESKTOP*/
+@media screen and (orientation: landscape) {
+    body {
+        background-image: url('https://api.maao.cc/paimon?l=1');
+    }
+    .container {
+        width: 60vw;
+        max-width: 800px;
+        min-width: 400px;
+        margin: 5vh auto;
+    }   
+}
+
+.card {
+    margin-bottom: 5px;
+    text-align: center;
+    padding: 1px;
+    border-radius: 20px;
+    background-color: rgba(30, 30, 30, 0.96); /* 调暗卡片背景颜色 */
+    color: white; /* 确保卡片内文字颜色也是白色 */
+}
+
+.link {
+    color: white; /* 将链接颜色改为白色以保持一致 */
+    text-decoration: underline; /* 添加下划线以增加可见性 */
+}

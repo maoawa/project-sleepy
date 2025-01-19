@@ -24,6 +24,9 @@ h1, h2, h3 {
         min-width: 280px;
         margin: 5vh auto;
     }
+    hr{
+        width: 60vw;
+    }
 }
 
 /*DESKTOP*/
@@ -36,13 +39,16 @@ h1, h2, h3 {
         max-width: 800px;
         min-width: 400px;
         margin: 5vh auto;
-    }   
+    }
+    hr{
+        width: 40vw;
+    }
 }
 
 .card {
     margin-bottom: 5px;
     text-align: center;
-    padding: 1px;
+    padding: 5px;
     border-radius: 20px;
     background-color: rgba(30, 30, 30, 0.96); /* 调暗卡片背景颜色 */
     color: white; /* 确保卡片内文字颜色也是白色 */
@@ -51,4 +57,23 @@ h1, h2, h3 {
 .link {
     color: white; /* 将链接颜色改为白色以保持一致 */
     text-decoration: underline; /* 添加下划线以增加可见性 */
+}
+
+.homepod {
+    display: inline-flex; /* 使图标和文字在同一行 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+}
+
+.homepod img {
+    height: 40px;
+    width: 40px;
+}
+
+hr{
+    align-items: center;
+    height: 2px;
+    opacity: 0.8;
+    background-color:gray;
+    border: none;
 }

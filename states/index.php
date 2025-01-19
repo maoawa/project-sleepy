@@ -1,11 +1,15 @@
 <?php
 include 'config.php';
-global $endpoint, $host, $webhost, $token, $cacheFile, $cacheTTL;
+global $endpoint, $host, $token, $cacheFile, $cacheTTL;
+include 'statistics/counter.php';
+
+// 限制 JSON 编码的浮点数精度
+ini_set('serialize_precision', 14);
 
 // 指定每个实体需要保留的字段
 $entities = [
     "input_boolean.private_mode" => [],
-    "input_boolean.awake" => [],
+    "input_text.mars_state" => [],
     "light.headlight" => [],
     "light.left_side_lights" => ["light.brightness", "light.color"],
     "light.right_side_lights" => ["light.brightness", "light.color_temperature"],
@@ -13,64 +17,32 @@ $entities = [
     "switch.electric_blanket" => [],
     "sensor.room_temperature" => [],
     "sensor.room_humidity" => [],
-    "weather.forecast_home" => ["temperature", "humidity", "wind_speed"]
+    "weather.forecast_home" => ["temperature", "humidity", "wind_speed"],
+    "binary_sensor.light_sensor" => []
 ];
 
-// 动态提取需要的字段
-function extract_entity_data($entity, $fields_to_keep, $host, $webhost, $downloadCover) {
+function extract_entity_data($entity, $fields_to_keep) {
     $filtered_data = [
-        "state" => $entity['state']
+        "state" => $entity['state'] // 保留原始状态
     ];
 
     foreach ($fields_to_keep as $field) {
-        $value = $entity['attributes'][$field] ?? null;
-
-        if ($field === "entity_picture" && !empty($value)) {
-            $remoteUrl = rtrim($host, '/') . $value;
-            $localFile = __DIR__ . "/mars-homepod-cover.png"; // 本地图片保存路径
-            $localUrl = rtrim($webhost, '/') . "/states/mars-homepod-cover.png";
-
-            if ($downloadCover) {
-                // 下载图片并保存到本地
-                $ch = curl_init($remoteUrl);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $imageData = curl_exec($ch);
-                curl_close($ch);
-
-                if ($imageData) {
-                    file_put_contents($localFile, $imageData);
-                }
-            }
-
-            // 无论是否下载，返回源服务器地址
-            $value = $remoteUrl;
-        }
-
-        $filtered_data[$field] = $value;
+        // 直接筛选需要的字段，不做任何处理
+        $filtered_data[$field] = $entity['attributes'][$field] ?? null;
     }
 
     return $filtered_data;
 }
 
 // 构造数据
-function format_data_by_entity_id($data, $entities, $host, $webhost, $downloadCover) {
+function format_data_by_entity_id($data, $entities) {
     $formatted = [];
     foreach ($data as $entity) {
         if (isset($entities[$entity['entity_id']])) {
-            $formatted[$entity['entity_id']] = extract_entity_data($entity, $entities[$entity['entity_id']], $host, $webhost, $downloadCover);
+            $formatted[$entity['entity_id']] = extract_entity_data($entity, $entities[$entity['entity_id']]);
         }
     }
     return $formatted;
-}
-
-// 替换 entity_picture 为本地缓存的 URL
-function update_cache_urls($filtered_data, $webhost) {
-    foreach ($filtered_data as $entity_id => $data) {
-        if (isset($data['entity_picture'])) {
-            $filtered_data[$entity_id]['entity_picture'] = rtrim($webhost, '/') . "/states/mars-homepod-cover.png";
-        }
-    }
-    return $filtered_data;
 }
 
 // 检查缓存
@@ -110,32 +82,29 @@ if (curl_errno($ch)) {
 $data = json_decode($response, true);
 curl_close($ch);
 
-// 拉取新数据并下载图片
-$filtered_data = format_data_by_entity_id($data, $entities, $host, $webhost, true);
-
-// 写入缓存前替换图片为本地 URL
-$cached_data = update_cache_urls($filtered_data, $webhost);
+// 拉取新数据并构建格式化数据
+$filtered_data = format_data_by_entity_id($data, $entities);
 
 // 检查 private_mode
 $is_private_mode_on = false;
-if (isset($cached_data['input_boolean.private_mode']) && $cached_data['input_boolean.private_mode']['state'] === 'on') {
+if (isset($filtered_data['input_boolean.private_mode']) && $filtered_data['input_boolean.private_mode']['state'] === 'on') {
     $is_private_mode_on = true;
 }
 
 if ($is_private_mode_on) {
-    $cached_data = array_filter($cached_data, function ($key) {
-        return in_array($key, ['input_boolean.private_mode', 'input_boolean.sleeping']);
+    $filtered_data = array_filter($filtered_data, function ($key) {
+        return in_array($key, ['input_boolean.private_mode', 'input_text.mars_state']);
     }, ARRAY_FILTER_USE_KEY);
 }
 
 // 写入缓存文件
 $cacheData = [
     "timestamp" => time(),
-    "data" => $cached_data
+    "data" => $filtered_data
 ];
 file_put_contents($cacheFile, json_encode($cacheData, JSON_PRETTY_PRINT));
 
-// 返回数据（使用源服务器地址）
+// 返回数据
 header("Content-Type: application/json");
 echo json_encode(array_merge([
     "cached" => false,

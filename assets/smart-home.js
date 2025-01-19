@@ -1,15 +1,39 @@
+// 添加一个全局变量来跟踪隐私模式状态
+let previousPrivateMode = false;
+
 function updatePage(data) {
+    const smartHomeInfoElement = document.getElementById('smart-home-info');
+    const privateModeState = data['input_boolean.private_mode']?.state;
+
+    // 检查隐私模式状态变化
+    if (privateModeState === 'on') {
+        smartHomeInfoElement.innerHTML = '<i class="fa-solid fa-user-lock"></i> 隐私模式已启用<br>毛毛可能目前正忙，请稍后再回来看看';
+        previousPrivateMode = true;
+    } else if (previousPrivateMode && privateModeState === 'off') {
+        // 如果隐私模式从开启变为关闭，刷新页面
+        window.location.reload();
+        return;
+    } else {
+        previousPrivateMode = false;
+    }
+
+    // 继续处理其他状态更新逻辑
     const marsStateElement = document.getElementById('mars-state');
     const cacheStateElement = document.getElementById('cache-state');
     const updateElement = document.getElementById('update');
-    const headlightStateElement = document.getElementById('headlight-state'); // 大灯状态元素
-    const headlightIconElement = document.querySelector('#headlight-icon'); // 大灯图标元素
-    const leftSideLightStateElement = document.getElementById('left-side-light-state'); // 左侧灯状态元素
-    const leftSideLightIconElement = document.getElementById('left-side-light-icon'); // 左侧灯图标元素
-    const rightSideLightStateElement = document.getElementById('right-side-light-state'); // 右侧灯状态元素
-    const rightSideLightIconElement = document.getElementById('right-side-light-icon'); // 右侧灯图标元素
+    const headlightStateElement = document.getElementById('headlight-state');
+    const headlightIconElement = document.querySelector('#headlight-icon');
+    const leftSideLightStateElement = document.getElementById('left-side-light-state');
+    const leftSideLightIconElement = document.getElementById('left-side-light-icon');
+    const rightSideLightStateElement = document.getElementById('right-side-light-state');
+    const rightSideLightIconElement = document.getElementById('right-side-light-icon');
+    const lightSensorStateElement = document.getElementById('light-sensor-state');
+    const lightSensorIconElement = document.querySelector('#light-sensor-icon');
+    const electricBlanketStateElement = document.getElementById('electric-blanket-state');
+    const temperatureStateElement = document.getElementById('temperature-state');
+    const humidityStateElement = document.getElementById('humidity-state');
 
-    // 清除已有的倒计时，防止重复运行
+
     if (window.previousCountdownInterval) {
         clearInterval(window.previousCountdownInterval);
     }
@@ -17,22 +41,32 @@ function updatePage(data) {
         clearInterval(window.previousAgeInterval);
     }
 
-    // 更新“毛毛当前应该”状态
-    const awakeState = data['input_boolean.awake']?.state === 'on';
-    marsStateElement.textContent = awakeState ? '醒着' : '睡着了';
-    marsStateElement.style.color = awakeState ? 'green' : 'gray';
+    const marsState = data['input_text.mars_state']?.state;
+    if (marsState) {
+        if (marsState === 'awake') {
+            marsStateElement.textContent = '醒着';
+            marsStateElement.style.color = 'green';
+        } else if (marsState === 'sleeping') {
+            marsStateElement.textContent = '睡似了';
+            marsStateElement.style.color = 'gray';
+        } else {
+            marsStateElement.textContent = marsState;
+            marsStateElement.style.color = 'white';
+        }
+    } else {
+        marsStateElement.textContent = '未知';
+        marsStateElement.style.color = 'red';
+    }
 
-    // 根据缓存状态设置文本内容
-    let age = data.cache_age || 0; // 获取初始数据年龄
+    let age = data.cache_age || 0;
     if (data.cached) {
         cacheStateElement.textContent = `已读取缓存，数据更新于 ${age} 秒前`;
     } else {
         cacheStateElement.textContent = `即时数据，更新于 ${age} 秒前`;
     }
 
-    cacheStateElement.style.display = 'block'; // 显示状态信息
+    cacheStateElement.style.display = 'block';
 
-    // 每秒更新数据年龄
     window.previousAgeInterval = setInterval(() => {
         age++;
         if (data.cached) {
@@ -42,82 +76,241 @@ function updatePage(data) {
         }
     }, 1000);
 
-    // 设置下一次自动更新的倒计时
-    let nextUpdate = 15; // 自动更新间隔为 15 秒
+    let nextUpdate = 15;
     updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
 
     window.previousCountdownInterval = setInterval(() => {
         nextUpdate--;
         updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
         if (nextUpdate <= 0) {
-            clearInterval(window.previousCountdownInterval); // 停止倒计时
+            clearInterval(window.previousCountdownInterval);
         }
     }, 1000);
 
-    // 更新大灯状态和图标
     const headlightState = data['light.headlight']?.state;
     if (headlightState === 'on') {
         headlightStateElement.textContent = '开启';
         headlightStateElement.style.color = 'green';
-        headlightIconElement.className = 'fa-solid fa-lightbulb'; // 设置图标为实心灯泡
+        headlightIconElement.className = 'fa-solid fa-lightbulb';
     } else if (headlightState === 'off') {
         headlightStateElement.textContent = '关闭';
         headlightStateElement.style.color = 'gray';
-        headlightIconElement.className = 'fa-regular fa-lightbulb'; // 设置图标为空心灯泡
+        headlightIconElement.className = 'fa-regular fa-lightbulb';
     } else {
         headlightStateElement.textContent = '未知';
-        headlightStateElement.style.color = 'black';
-        headlightIconElement.className = 'fa-regular fa-lightbulb'; // 设置图标为空心灯泡
+        headlightStateElement.style.color = 'white';
+        headlightIconElement.className = 'fa-regular fa-lightbulb';
     }
 
-    // 更新左侧灯状态
     const leftSideLight = data['light.left_side_lights'];
     if (leftSideLight) {
         const leftSideLightState = leftSideLight.state;
         const brightness = leftSideLight['light.brightness'] || 0;
-        const color = leftSideLight['light.color'] || 0xFFFFFF;
-        const hexColor = `#${color.toString(16).padStart(6, '0')}`;
-
+        const color = leftSideLight['light.color'] || 0xFFFFFF; // 默认颜色为白色
+        const hexColor = `#${color.toString(16).padStart(6, '0')}`; // 将颜色值转换为 Hex 格式
+    
         if (leftSideLightState === 'on') {
             leftSideLightStateElement.innerHTML = `<span style="color:green;">开启</span> 亮度: <span>${brightness}%</span> 颜色: <span style="color:${hexColor};">${hexColor}</span>`;
             leftSideLightIconElement.className = 'fa-solid fa-lightbulb';
             leftSideLightIconElement.style.color = hexColor;
-            leftSideLightIconElement.style.opacity = 0.5 + (brightness / 200);
+            leftSideLightIconElement.style.opacity = 0.5 + (brightness / 200); // 调整明暗变化
         } else {
             leftSideLightStateElement.textContent = '关闭';
             leftSideLightIconElement.className = 'fa-regular fa-lightbulb';
             leftSideLightIconElement.style.color = 'gray';
+            leftSideLightIconElement.style.opacity = 0.5; // 关闭时固定明暗
         }
     } else {
         leftSideLightStateElement.textContent = '未知';
     }
-
-    // 更新右侧灯状态
+    
     const rightSideLight = data['light.right_side_lights'];
     if (rightSideLight) {
         const rightSideLightState = rightSideLight.state;
-        const brightnessRaw = rightSideLight['light.brightness'] || 0; // 原始亮度
-        const brightness = Math.round((brightnessRaw / 65535) * 100); // 转换为百分比
+        const brightnessRaw = rightSideLight['light.brightness'] || 0;
+        const brightness = Math.round((brightnessRaw / 65535) * 100); // 将 16-bit 亮度值转换为百分比
         const colorTemperature = rightSideLight['light.color_temperature'] || 0;
-
-        const colorRGB = colorTempToRGB(colorTemperature); // 根据色温获取颜色
+    
+        const colorRGB = colorTempToRGB(colorTemperature);
         if (rightSideLightState === 'on') {
             rightSideLightStateElement.innerHTML = `
                 <span style="color:green;">开启</span> 
                 亮度: <span>${brightness}%</span> 
                 色温: <span style="color:${colorRGB};">${colorTemperature}K</span>`;
             rightSideLightIconElement.className = 'fa-solid fa-lightbulb';
-            rightSideLightIconElement.style.color = colorRGB; // 图标颜色
+            rightSideLightIconElement.style.color = colorRGB;
+            rightSideLightIconElement.style.opacity = 0.5 + (brightness / 200); // 调整明暗变化
         } else {
             rightSideLightStateElement.textContent = '关闭';
             rightSideLightIconElement.className = 'fa-regular fa-lightbulb';
+            rightSideLightIconElement.style.color = 'gray';
+            rightSideLightIconElement.style.opacity = 0.5; // 关闭时固定明暗
         }
     } else {
         rightSideLightStateElement.textContent = '未知';
     }
+
+    // 更新环境光亮度状态
+    const lightSensorState = data['binary_sensor.light_sensor']?.state;
+    if (lightSensorState === 'on') {
+        lightSensorStateElement.textContent = '亮';
+        lightSensorStateElement.style.color = 'gold';
+        lightSensorIconElement.className = 'fa-solid fa-sun'; // 实心太阳图标
+        lightSensorIconElement.style.color = 'gold';
+    } else if (lightSensorState === 'off') {
+        lightSensorStateElement.textContent = '暗';
+        lightSensorStateElement.style.color = 'gray';
+        lightSensorIconElement.className = 'fa-regular fa-sun'; // 空心太阳图标
+        lightSensorIconElement.style.color = 'gray';
+    } else {
+        lightSensorStateElement.textContent = '未知';
+        lightSensorStateElement.style.color = 'white';
+        lightSensorIconElement.className = 'fa-regular fa-sun';
+    }
+
+    // 更新电热毯状态
+    const electricBlanketState = data['switch.electric_blanket']?.state;
+    if (electricBlanketState === 'on') {
+        electricBlanketStateElement.textContent = '开启';
+        electricBlanketStateElement.style.color = 'green';
+    } else if (electricBlanketState === 'off') {
+        electricBlanketStateElement.textContent = '关闭';
+        electricBlanketStateElement.style.color = 'gray';
+    } else {
+        electricBlanketStateElement.textContent = '未知';
+        electricBlanketStateElement.style.color = 'white';
+    }
+
+    // 更新温湿度状态
+    const roomTemperature = data['sensor.room_temperature']?.state;
+    const roomHumidity = data['sensor.room_humidity']?.state;
+    if (roomTemperature) {
+        temperatureStateElement.textContent = `${parseFloat(roomTemperature).toFixed(1)}°C`;
+    } else {
+        temperatureStateElement.textContent = '未知';
+    }
+
+    if (roomHumidity) {
+        humidityStateElement.textContent = `${parseInt(roomHumidity)}%`;
+    } else {
+        humidityStateElement.textContent = '未知';
+    }
+    // 更新天气信息
+    // 默认值和映射
+    const DEFAULT_WEATHER_STATE = '未知';
+    const DEFAULT_ICON = 'fa-question';
+    const DEFAULT_TEMPERATURE = '未知';
+    const DEFAULT_HUMIDITY = '未知';
+    const DEFAULT_WIND_SPEED = '未知';
+
+    const weatherIcons = {
+        'clear-night': 'fa-moon',
+        'cloudy': 'fa-cloud',
+        'fog': 'fa-smog',
+        'hail': 'fa-cloud-meatball',
+        'lightning': 'fa-bolt',
+        'partlycloudy': 'fa-cloud-sun',
+        'pouring': 'fa-cloud-showers-heavy',
+        'rainy': 'fa-cloud-rain',
+        'snowy': 'fa-snowflake',
+        'sunny': 'fa-sun',
+        'windy': 'fa-wind',
+        'windy-variant': 'fa-cloud-wind',
+        'exceptional': 'fa-star'
+    };
+
+    const weatherTranslations = {
+        'clear-night': '晴朗的夜晚',
+        'cloudy': '多云',
+        'fog': '有雾',
+        'hail': '冰雹',
+        'lightning': '雷电',
+        'partlycloudy': '局部多云',
+        'pouring': '倾盆大雨',
+        'rainy': '下雨',
+        'snowy': '下雪',
+        'sunny': '晴天',
+        'windy': '有风',
+        'windy-variant': '多风',
+        'exceptional': '特殊天气'
+    };
+
+    // 更新天气信息的函数
+    function updateWeatherInfo(weather) {
+        const weatherStateElement = document.getElementById('weather-state');
+        const weatherIconElement = document.getElementById('weather-icon');
+        const weatherTemperatureElement = document.getElementById('weather-temperature');
+        const weatherHumidityElement = document.getElementById('weather-humidity');
+        const weatherWindSpeedElement = document.getElementById('weather-wind-speed');
+
+        if (weather) {
+            const state = weather.state || 'unknown';
+            const temperature = weather.temperature !== undefined 
+                ? `${parseFloat(weather.temperature).toFixed(1)}°C` 
+                : DEFAULT_TEMPERATURE;
+            const humidity = weather.humidity !== undefined 
+                ? `${parseInt(weather.humidity)}%` 
+                : DEFAULT_HUMIDITY;
+            const windSpeed = weather.wind_speed !== undefined 
+                ? `${parseFloat(weather.wind_speed).toFixed(1)} km/h` 
+                : DEFAULT_WIND_SPEED;
+
+            // 获取中文翻译和图标
+            const translatedState = weatherTranslations[state] || DEFAULT_WEATHER_STATE;
+            const iconClass = weatherIcons[state] || DEFAULT_ICON;
+
+            // 更新 DOM
+            weatherStateElement.textContent = translatedState;
+            weatherIconElement.className = `fa-solid ${iconClass}`;
+            weatherTemperatureElement.textContent = temperature;
+            weatherHumidityElement.textContent = humidity;
+            weatherWindSpeedElement.textContent = windSpeed;
+        } else {
+            // 如果天气信息不存在，设置为默认值
+            weatherStateElement.textContent = DEFAULT_WEATHER_STATE;
+            weatherIconElement.className = `fa-solid ${DEFAULT_ICON}`;
+            weatherTemperatureElement.textContent = DEFAULT_TEMPERATURE;
+            weatherHumidityElement.textContent = DEFAULT_HUMIDITY;
+            weatherWindSpeedElement.textContent = DEFAULT_WIND_SPEED;
+        }
+    }
+
+    // 从数据中提取天气信息并更新
+    const weather = data['weather.forecast_home'];
+    updateWeatherInfo(weather);
+
+    // 更新 HomePod 状态
+    const homePodData = data['media_player.mars_homepod_right'];
+    const homePodStateElement = document.getElementById('homepod-state');
+
+    if (homePodData) {
+        const mediaTitle = homePodData.media_title;
+        const mediaArtist = homePodData.media_artist || '未知艺术家';
+        const mediaAlbumName = homePodData.media_album_name || '未知专辑';
+        let appName = homePodData.app_name || '未知应用';
+
+        // 如果 appName 是 "Music"，替换为 "Apple Music"
+        if (appName === 'Music') {
+            appName = 'Apple Music';
+        }
+
+        if (mediaTitle) {
+            homePodStateElement.innerHTML = `${mediaTitle}<br>${mediaArtist} - ${mediaAlbumName}<br>${appName}`;
+            homePodStateElement.style.color = 'green';
+        } else {
+            homePodStateElement.textContent = '未在播放';
+            homePodStateElement.style.color = 'gray';
+        }
+    } else {
+        homePodStateElement.textContent = '未在播放';
+        homePodStateElement.style.color = 'gray';
+    }
 }
 
-// 转换色温为颜色 (实际色温范围为 2000K - 6500K)
+function rgbToHex(r, g, b) {
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
 function colorTempToRGB(temp) {
     const t = temp / 100;
     let r, g, b;
@@ -135,7 +328,6 @@ function colorTempToRGB(temp) {
     return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
 }
 
-// 定义函数以请求 API 并更新页面
 function fetchData() {
     fetch('states/', {
         method: 'GET',
@@ -152,7 +344,9 @@ function fetchData() {
             return response.json();
         })
         .then(data => {
-            console.log('Data from Home Assistant:', data);
+            const currentTime = new Date();
+            const formattedTime = `${currentTime.getFullYear()}-${String(currentTime.getMonth() + 1).padStart(2, '0')}-${String(currentTime.getDate()).padStart(2, '0')} ${String(currentTime.getHours()).padStart(2, '0')}:${String(currentTime.getMinutes()).padStart(2, '0')}:${String(currentTime.getSeconds()).padStart(2, '0')}`;
+            console.log(`Data at ${formattedTime}`, data);
             updatePage(data);
         })
         .catch(error => {
@@ -160,8 +354,5 @@ function fetchData() {
         });
 }
 
-// 页面初始化时立即请求一次数据
 fetchData();
-
-// 每隔 15 秒重新请求数据
 setInterval(fetchData, 15000);

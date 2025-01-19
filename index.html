@@ -22,18 +22,41 @@
             </div>
 
             <div class="card">
-                <h2>
-                    毛毛的小窝
+                <h1>毛毛的小窝</h1>
+                <h2 id="smart-home-info">
+
+                    <i id="light-sensor-icon" class="fa-regular fa-sun"></i> 环境光: <a id="light-sensor-state">未知</a>
                     <br>
                     <i id="headlight-icon" class="fa-regular fa-lightbulb" style="color: white;"></i> 大灯: <a id="headlight-state">未知</a>
                     <br>
                     <i id="left-side-light-icon" class="fa-regular fa-lightbulb"></i> 左侧灯: <a id="left-side-light-state">未知</a>
                     <br>
                     <i id="right-side-light-icon" class="fa-regular fa-lightbulb"></i> 右侧灯: <a id="right-side-light-state">未知</a>
+
+                    <hr>
+
+                    <div class="homepod">
+                        <img src="assets/homepod-mini-single.svg" alt="HomePod mini">
+                        <span>毛毛的 HomePod</span>
+                    </div>
+                    <br>
+                    <span id="homepod-state">未在播放</span>
+
+                    <hr>
+
+                    <i id="electric-blanket-icon" class="fa-solid fa-bed"></i> 电热毯: <a id="electric-blanket-state">未知</a>
+                    <br>
+                    室内 | <i class="fa-solid fa-temperature-three-quarters"></i> 温度: <a id="temperature-state">未知</a> | <i class="fa-solid fa-droplet fa-xs"></i> 湿度: <a id="humidity-state">未知</a>
+
+                    <hr>
+
+                    <i id="weather-icon" class="fa-solid fa-question"></i> 贵阳市 <span id="weather-state">未知</span>
+                    <br>
+                    气温: <span id="weather-temperature">未知</span> | 湿度: <span id="weather-humidity">未知</span> | 风速: <span id="weather-wind-speed">未知</span>
+
                 </h2>
-                
             </div>
-            
+
             <div class="card">
                 <h3>
                     <a id="cache-state">缓存状态</a>
@@ -58,7 +81,7 @@
                     ©2025 <a href="https://maao.cc/" class="link">Mars [maao.cc] <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a> 保留所有权利。
                 </h3>
             </div>
-            
+
         </div>
         <script type="text/javascript" src="assets/smart-home.js"></script>
     </body>

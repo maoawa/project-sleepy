@@ -1,5 +1,5 @@
 states/config.php
 states/cache.json
 states/statistics/requests.json
-cover-cache/
+states/covers/
 .DS_Store

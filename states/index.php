@@ -34,12 +34,48 @@ function extract_entity_data($entity, $fields_to_keep) {
     return $filtered_data;
 }
 
+// 检查封面图片并下载
+function check_and_download_cover($media_title, $entity_picture) {
+    $covers_dir = __DIR__ . '/covers/';
+    if (!is_dir($covers_dir)) {
+        mkdir($covers_dir, 0755, true);
+    }
+
+    $cover_path = $covers_dir . $media_title . '.png';
+    if (file_exists($cover_path)) {
+        return;
+    }
+
+    global $host;
+    $image_url = $host . $entity_picture;
+    $ch = curl_init($image_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $image_data = curl_exec($ch);
+    if (curl_errno($ch)) {
+        error_log("Failed to download image: " . curl_error($ch));
+        curl_close($ch);
+        return;
+    }
+    curl_close($ch);
+
+    file_put_contents($cover_path, $image_data);
+}
+
 // 构造数据
 function format_data_by_entity_id($data, $entities) {
     $formatted = [];
     foreach ($data as $entity) {
         if (isset($entities[$entity['entity_id']])) {
             $formatted[$entity['entity_id']] = extract_entity_data($entity, $entities[$entity['entity_id']]);
+
+            // 如果是媒体播放器，检查并处理封面图片
+            if ($entity['entity_id'] === 'media_player.mars_homepod_right') {
+                $media_title = $entity['attributes']['media_title'] ?? null;
+                $entity_picture = $entity['attributes']['entity_picture'] ?? null;
+                if ($media_title && $entity_picture) {
+                    check_and_download_cover($media_title, $entity_picture);
+                }
+            }
         }
     }
     return $formatted;

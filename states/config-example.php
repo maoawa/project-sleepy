@@ -1,3 +1,4 @@
+<!--config.php-->
 <?php
 $endpoint = 'https://your-home.example.net/api';
 $host = 'https://your-home.example.net';

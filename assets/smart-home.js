@@ -7,6 +7,8 @@ import { marsHomePod } from './devices/mars-homepod.js';
 import { electricBlanket } from './devices/electric-blanket.js';
 import { roomState } from './devices/room-state.js';
 import { weather } from './devices/weather.js';
+import { runningApp } from './devices/running-app.js';
+import { message } from './devices/message.js';
 
 let previousPrivateMode = false;
 
@@ -71,6 +73,8 @@ function updatePage(data) {
     // 隐私模式检查
     if (privateModeState === 'on') {
         marsState(data);
+        runningApp(data);
+        message(data);
         document.getElementById('smart-home-info').innerHTML =
             '<i class="fa-solid fa-user-lock"></i> 隐私模式已启用<br>毛毛可能目前正忙，请稍后再回来看看';
         previousPrivateMode = true;
@@ -91,6 +95,8 @@ function updatePage(data) {
     electricBlanket(data);
     roomState(data);
     weather(data);
+    runningApp(data);
+    message(data);
 }
 
 setInterval(fetchData, 15000);

@@ -6,7 +6,7 @@ export function marsState(data) {
             marsStateElement.textContent = '醒着';
             marsStateElement.style.color = 'green';
         } else if (marsState === 'sleeping') {
-            marsStateElement.textContent = '睡着了';
+            marsStateElement.textContent = '睡似了';
             marsStateElement.style.color = 'gray';
         } else {
             marsStateElement.textContent = marsState;

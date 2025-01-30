@@ -18,7 +18,7 @@ export async function marsHomePod(data) {
 
         // 如果 appName 是 "Music"，替换为 "Apple Music"
         if (appName === 'Music') {
-            appName = 'Apple Music';
+            appName = '<i class="fa-brands fa-apple fa-xs"></i>Music';
         }
 
         // 检查是否需要更新
@@ -110,7 +110,6 @@ export async function marsHomePod(data) {
         }
     }
 }
-
 // 提取图片主色调的辅助函数
 async function getDominantColor(imageSrc) {
     return new Promise((resolve, reject) => {
@@ -127,20 +126,45 @@ async function getDominantColor(imageSrc) {
             ctx.drawImage(img, 0, 0, img.width, img.height);
             const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
 
-            // 计算平均颜色
-            let r = 0, g = 0, b = 0, count = 0;
+            // 计算主色调，避开与深灰色接近的颜色
+            const darkGray = [30, 30, 30]; // 深灰色 (30, 30, 30)
+            const threshold = 50; // 差异阈值
+            let r = 0,
+                g = 0,
+                b = 0,
+                count = 0;
+
             for (let i = 0; i < imageData.length; i += 4) {
-                r += imageData[i];
-                g += imageData[i + 1];
-                b += imageData[i + 2];
-                count++;
+                const pixelR = imageData[i];
+                const pixelG = imageData[i + 1];
+                const pixelB = imageData[i + 2];
+
+                // 计算颜色差异
+                const diff =
+                    Math.sqrt(
+                        Math.pow(pixelR - darkGray[0], 2) +
+                        Math.pow(pixelG - darkGray[1], 2) +
+                        Math.pow(pixelB - darkGray[2], 2)
+                    );
+
+                // 跳过与深灰色接近的颜色
+                if (diff > threshold) {
+                    r += pixelR;
+                    g += pixelG;
+                    b += pixelB;
+                    count++;
+                }
             }
 
-            r = Math.floor(r / count);
-            g = Math.floor(g / count);
-            b = Math.floor(b / count);
-
-            resolve(`rgb(${r}, ${g}, ${b})`);
+            if (count === 0) {
+                // 如果有效像素为零，设置为默认颜色
+                resolve('white');
+            } else {
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
+                resolve(`rgb(${r}, ${g}, ${b})`);
+            }
         };
 
         img.onerror = (err) => {

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
-        <title>毛毛睡似了吗？</title>
+        <title>毛毛睡似了吗?</title>
         <link rel="stylesheet" href="assets/style.css">
         <base target="_blank">
         <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
@@ -12,14 +12,18 @@
         <div class="container">
 
             <div class="card">
-                <h1>毛毛睡<ruby>似<rt>sǐ</rt></ruby>了吗？</h1>
+                <h1>毛毛睡<ruby>似<rt>sǐ</rt></ruby>了吗?</h1>
                 <h2>——重生版</h2>
             </div>
 
             <div class="card">
                 <h2>毛毛当前应该: </h2>
                 <h1><a id="mars-state">醒着</a></h1>
+                <h3><a id="mars-mac-mini">毛毛的Mac: 离线</a></h3>
+                <h3><a id="mars-legion">毛毛的Legion: 离线</a></h3>
             </div>
+
+            <div class="message-container"></div>
 
             <div class="card">
                 <h1>毛毛的小窝</h1>
@@ -48,13 +52,17 @@
 
                     <i id="electric-blanket-icon" class="fa-solid fa-bed"></i> 电热毯: <a id="electric-blanket-state">未知</a>
                     <br>
-                    室内 | <i class="fa-solid fa-temperature-three-quarters"></i> 温度: <a id="temperature-state">未知</a> | <i class="fa-solid fa-droplet fa-xs"></i> 湿度: <a id="humidity-state">未知</a>
+                    <i class="fa-solid fa-temperature-three-quarters fa-2xs"></i>温度<a id="temperature-state">未知</a>
+                    <i class="fa-solid fa-droplet fa-2xs"></i>湿度<a id="humidity-state">未知</a>
+                    <i class="fa-solid fa-gauge-high fa-2xs"></i>气压<a id="pressure-state">未知</a>
 
                     <hr>
 
                     <i id="weather-icon" class="fa-solid fa-question"></i> 贵阳市 <span id="weather-state">未知</span>
                     <br>
-                    气温: <span id="weather-temperature">未知</span> | 湿度: <span id="weather-humidity">未知</span> | 风速: <span id="weather-wind-speed">未知</span>
+                    <i class="fa-solid fa-temperature-three-quarters fa-2xs"></i>气温<span id="weather-temperature">未知</span>
+                    <i class="fa-solid fa-droplet fa-2xs"></i>湿度<span id="weather-humidity">未知</span>
+                    <i class="fa-solid fa-wind fa-2xs"></i>风速<span id="weather-wind-speed">未知</span>
 
                 </h2>
             </div>
@@ -65,6 +73,8 @@
                     <a id="update">下一次自动更新: 15 秒后</a>
                     <br>
                     通过这个页面，你可以了解毛毛当前的状态。
+                    <br>
+                    毛毛的其他网站: <i class="fa-brands fa-microblog fa-xs"></i><a href="https://www.maodream.com/" class="link">毛毛的梦(博客)</a><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i> <i class="fa-solid fa-user fa-xs"></i><a href="https://maao.cc/" class="link">这里是毛毛(主页)</a><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i>
                 </h3>
             </div>
 
@@ -72,7 +82,7 @@
                 <h3>
                     这个项目在AGPL许可下开源于GitHub:
                     <br>
-                    <a href="https://github.com/maoawa/sleepy-smart-home" class="link"><i class="fa-brands fa-github"></i> maoawa/sleepy-smart-home <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+                    <i class="fa-brands fa-github"></i><a href="https://github.com/maoawa/project-sleepy" class="link">maoawa/project-sleepy<i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
                 </h3>
             </div>
 
@@ -80,7 +90,7 @@
                 <h3>
                     Project Sleepy (Smart Home)
                     <br>
-                    ©2025 <a href="https://maao.cc/" class="link">Mars [maao.cc] <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a> 保留所有权利。
+                    ©2025 Mars <a href="https://maao.cc/" class="link">(maao.cc)<i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a> 保留所有权利。
                 </h3>
             </div>
 

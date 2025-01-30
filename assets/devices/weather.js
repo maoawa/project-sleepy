@@ -49,13 +49,13 @@ export function weather(data) {
         if (weather) {
             const state = weather.state || 'unknown';
             const temperature = weather.temperature !== undefined 
-                ? `${parseFloat(weather.temperature).toFixed(1)}°C` 
+                ? `${parseInt(weather.temperature)}°C` 
                 : DEFAULT_TEMPERATURE;
             const humidity = weather.humidity !== undefined 
                 ? `${parseInt(weather.humidity)}%` 
                 : DEFAULT_HUMIDITY;
             const windSpeed = weather.wind_speed !== undefined 
-                ? `${parseFloat(weather.wind_speed).toFixed(1)} km/h` 
+                ? `${parseFloat(weather.wind_speed).toFixed(1)}m/s` 
                 : DEFAULT_WIND_SPEED;
 
             // 获取中文翻译和图标

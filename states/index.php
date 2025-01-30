@@ -17,8 +17,12 @@ $entities = [
     "switch.electric_blanket" => [],
     "sensor.room_temperature" => [],
     "sensor.room_humidity" => [],
+    "sensor.room_pressure" => [],
     "weather.forecast_home" => ["temperature", "humidity", "wind_speed"],
-    "binary_sensor.light_sensor" => []
+    "binary_sensor.light_sensor" => [],
+    "input_text.mars_mac_mini" => [],
+    "input_text.mars_legion" => [],
+    "input_text.message" => ["last_updated"],
 ];
 
 function extract_entity_data($entity, $fields_to_keep) {
@@ -27,8 +31,13 @@ function extract_entity_data($entity, $fields_to_keep) {
     ];
 
     foreach ($fields_to_keep as $field) {
-        // 直接筛选需要的字段，不做任何处理
-        $filtered_data[$field] = $entity['attributes'][$field] ?? null;
+        if (in_array($field, ['last_updated', 'last_changed'])) {
+            // 直接从根级获取 last_updated 和 last_changed
+            $filtered_data[$field] = $entity[$field] ?? null;
+        } else {
+            // 默认从 attributes 获取
+            $filtered_data[$field] = $entity['attributes'][$field] ?? null;
+        }
     }
 
     return $filtered_data;
@@ -129,7 +138,7 @@ if (isset($filtered_data['input_boolean.private_mode']) && $filtered_data['input
 
 if ($is_private_mode_on) {
     $filtered_data = array_filter($filtered_data, function ($key) {
-        return in_array($key, ['input_boolean.private_mode', 'input_text.mars_state']);
+        return in_array($key, ['input_boolean.private_mode', 'input_text.mars_state', 'input_text.message']);
     }, ARRAY_FILTER_USE_KEY);
 }
 

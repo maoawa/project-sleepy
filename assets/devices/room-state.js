@@ -6,17 +6,20 @@ export function roomState(data) {
     const roomTemperature = data['sensor.room_temperature']?.state;
     const roomHumidity = data['sensor.room_humidity']?.state;
     const roomPressure = data['sensor.room_pressure']?.state;
-    if (roomTemperature) {
+
+    if (roomTemperature && roomTemperature !== 'unavailable') {
         temperatureStateElement.textContent = `${parseFloat(roomTemperature).toFixed(1)}°C`;
     } else {
         temperatureStateElement.textContent = '未知';
     }
-    if (roomHumidity) {
+
+    if (roomHumidity && roomHumidity !== 'unavailable') {
         humidityStateElement.textContent = `${parseFloat(roomHumidity).toFixed(1)}%`;
     } else {
         humidityStateElement.textContent = '未知';
     }
-    if (roomPressure) {
+
+    if (roomPressure && roomPressure !== 'unavailable') {
         pressureStateElement.textContent = `${parseFloat(roomPressure).toFixed(1)}hPa`;
     } else {
         pressureStateElement.textContent = '未知';

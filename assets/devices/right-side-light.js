@@ -12,16 +12,17 @@ export function rightSideLight(data) {
         if (rightSideLightState === 'on') {
             rightSideLightStateElement.innerHTML = `
                 <span style="color:green;">开启</span> 
-                亮度: <span>${brightness}%</span> 
-                色温: <span style="color:${colorRGB};">${colorTemperature}K</span>`;
+                亮度: <span>${brightness}%</span>
+                `;
+                // 色温: <span style="color:${colorRGB};">${colorTemperature}K</span>
             rightSideLightIconElement.className = 'fa-solid fa-lightbulb';
             rightSideLightIconElement.style.color = colorRGB;
             rightSideLightIconElement.style.opacity = 0.5 + (brightness / 200); // 调整明暗变化
         } else {
             rightSideLightStateElement.textContent = '关闭';
+            rightSideLightStateElement.style.color = 'gray';
             rightSideLightIconElement.className = 'fa-regular fa-lightbulb';
             rightSideLightIconElement.style.color = 'gray';
-            rightSideLightIconElement.style.opacity = 0.5; // 关闭时固定明暗
         }
     } else {
         rightSideLightStateElement.textContent = '未知';

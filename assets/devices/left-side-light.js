@@ -9,15 +9,15 @@ export function leftSideLight(data) {
         const hexColor = `#${color.toString(16).padStart(6, '0')}`; // 将颜色值转换为 Hex 格式
 
         if (leftSideLightState === 'on') {
-            leftSideLightStateElement.innerHTML = `<span style="color:green;">开启</span> 亮度: <span>${brightness}%</span> 颜色: <span style="color:${hexColor};">${hexColor}</span>`;
+            leftSideLightStateElement.innerHTML = `<span style="color:green;">开启</span> 亮度: <span>${brightness}%</span>`; // 颜色: <span style="color:${hexColor};">${hexColor}</span>
             leftSideLightIconElement.className = 'fa-solid fa-lightbulb';
             leftSideLightIconElement.style.color = hexColor;
             leftSideLightIconElement.style.opacity = 0.5 + (brightness / 200); // 调整明暗变化
         } else {
             leftSideLightStateElement.textContent = '关闭';
             leftSideLightIconElement.className = 'fa-regular fa-lightbulb';
+            leftSideLightStateElement.style.color = 'gray';
             leftSideLightIconElement.style.color = 'gray';
-            leftSideLightIconElement.style.opacity = 0.5; // 关闭时固定明暗
         }
     } else {
         leftSideLightStateElement.textContent = '未知';

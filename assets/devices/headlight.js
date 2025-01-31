@@ -10,6 +10,7 @@ export function headlight(data) {
         headlightStateElement.textContent = '关闭';
         headlightStateElement.style.color = 'gray';
         headlightIconElement.className = 'fa-regular fa-lightbulb';
+        headlightIconElement.style.color = 'gray';
     } else {
         headlightStateElement.textContent = '未知';
         headlightStateElement.style.color = 'white';

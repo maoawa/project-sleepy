@@ -9,6 +9,16 @@
         <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
     </head>
     <body style="background-color: white;">
+
+        <div id="banner" style="background-color: red; color: white; text-align: center; font-weight: bold; padding: 10px; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; font-size: 16px;"><strong>THIS PROJECT IS IN BETA !<br>该项目正处于测试阶段 !</strong>
+            <br>
+            <i class="fa-brands fa-github"></i>GitHub: 
+            <a href="https://github.com/maoawa/project-sleepy" style="color: white; text-decoration: underline;">
+                maoawa/project-sleepy<i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i>
+            </a>
+        </div>
+        <div style="padding-top: 50px; "></div>
+        
         <div class="container">
 
             <div class="card">
@@ -18,9 +28,9 @@
 
             <div class="card">
                 <h2>毛毛当前应该: </h2>
-                <h1><a id="mars-state">醒着</a></h1>
-                <h3><a id="mars-mac-mini">毛毛的Mac: 离线</a></h3>
-                <h3><a id="mars-legion">毛毛的Legion: 离线</a></h3>
+                <h1><a id="mars-state">正在获取</a></h1>
+                <h3><a id="mars-mac-mini"></a></h3>
+                <h3><a id="mars-legion"></a></h3>
             </div>
 
             <div class="message-container"></div>
@@ -54,6 +64,7 @@
                     <br>
                     <i class="fa-solid fa-temperature-three-quarters fa-2xs"></i>温度<a id="temperature-state">未知</a>
                     <i class="fa-solid fa-droplet fa-2xs"></i>湿度<a id="humidity-state">未知</a>
+                    <br>
                     <i class="fa-solid fa-gauge-high fa-2xs"></i>气压<a id="pressure-state">未知</a>
 
                     <hr>

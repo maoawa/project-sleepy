@@ -6,6 +6,7 @@ export function headlight(data) {
         headlightStateElement.textContent = '开启';
         headlightStateElement.style.color = 'green';
         headlightIconElement.className = 'fa-solid fa-lightbulb';
+        headlightIconElement.style.color = 'white';
     } else if (headlightState === 'off') {
         headlightStateElement.textContent = '关闭';
         headlightStateElement.style.color = 'gray';
@@ -15,5 +16,6 @@ export function headlight(data) {
         headlightStateElement.textContent = '未知';
         headlightStateElement.style.color = 'white';
         headlightIconElement.className = 'fa-regular fa-lightbulb';
+        headlightIconElement.style.color = 'white';
     }
 }

@@ -13,7 +13,7 @@ export async function marsHomePod(data) {
     if (homePodData) {
         const mediaTitle = homePodData.media_title;
         const mediaArtist = homePodData.media_artist || '未知艺术家';
-        const mediaAlbumName = homePodData.media_album_name || '未知专辑';
+        const mediaAlbumName = homePodData.media_album_name || null; // 如果专辑名无效，设为 null
         let appName = homePodData.app_name || '未知应用';
 
         // 如果 appName 是 "Music"，替换为 "Apple Music"
@@ -41,7 +41,13 @@ export async function marsHomePod(data) {
         };
 
         if (mediaTitle) {
-            homePodStateElement.innerHTML = `${mediaTitle}<br>${mediaArtist} - ${mediaAlbumName}<br>${appName}`;
+            let mediaInfo = `${mediaTitle}<br>${mediaArtist}`;
+            if (mediaAlbumName) {
+                mediaInfo += ` - ${mediaAlbumName}`; // 仅当专辑名有效时添加
+            }
+            mediaInfo += `<br>${appName}`;
+
+            homePodStateElement.innerHTML = mediaInfo;
 
             // 如果封面不存在，创建并插入它
             let homePodCoverElement = document.getElementById('homepod-cover');
@@ -110,6 +116,7 @@ export async function marsHomePod(data) {
         }
     }
 }
+
 // 提取图片主色调的辅助函数
 async function getDominantColor(imageSrc) {
     return new Promise((resolve, reject) => {

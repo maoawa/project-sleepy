@@ -3,6 +3,7 @@ import { lightSensor } from './devices/light-sensor.js';
 import { headlight } from './devices/headlight.js';
 import { leftSideLight } from './devices/left-side-light.js';
 import { rightSideLight } from './devices/right-side-light.js';
+import { lightBar } from './devices/light-bar.js';
 import { marsHomePod } from './devices/mars-homepod.js';
 import { electricBlanket } from './devices/electric-blanket.js';
 import { roomState } from './devices/room-state.js';
@@ -91,6 +92,7 @@ function updatePage(data) {
     headlight(data);
     leftSideLight(data);
     rightSideLight(data);
+    lightBar(data);
     marsHomePod(data);
     electricBlanket(data);
     roomState(data);

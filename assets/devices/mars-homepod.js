@@ -28,7 +28,6 @@ export async function marsHomePod(data) {
             currentMedia.album === mediaAlbumName &&
             currentMedia.app === appName
         ) {
-            console.log('歌曲数据未变化，跳过更新');
             return;
         }
 

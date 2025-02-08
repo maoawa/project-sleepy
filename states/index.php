@@ -13,6 +13,7 @@ $entities = [
     "light.headlight" => [],
     "light.left_side_lights" => ["light.brightness", "light.color"],
     "light.right_side_lights" => ["light.brightness", "light.color_temperature"],
+    "light.light_bar" => ["light.brightness", "light.color_temperature"],
     "media_player.mars_homepod_right" => ["media_title", "media_artist", "media_album_name", "app_name", "entity_picture"],
     "switch.electric_blanket" => [],
     "sensor.room_temperature" => [],

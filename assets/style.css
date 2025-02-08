@@ -8,6 +8,8 @@ body {
     background-attachment: fixed;
     background-color: rgba(20, 20, 20, 0.95); /* 调暗背景颜色 */
     color: white; /* 设置默认文字颜色为白色 */
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 h1, h2, h3 {

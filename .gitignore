@@ -2,4 +2,8 @@ states/config.php
 states/cache.json
 states/statistics/requests.json
 states/covers/
+boom/config.php
+boom/privacy-policy/
+favicon.ico
+
 .DS_Store

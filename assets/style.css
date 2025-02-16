@@ -82,9 +82,79 @@ hr{
 }
 
 .homepod-cover{
-    width: 30%;
-    border-radius: 5px;
+    width: 40%;
+    border-radius: 15px; /* 圆角 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
 }
 #homepod-state {
     text-shadow: 1px 1px 2px black, -1px -1px 2px black;
+}
+
+.boom-button {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 2px solid #007bff;
+    background-color: rgba(50, 50, 50, 0.96); /* 稍微调亮背景 */
+    color: #007bff;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.boom-button:hover {
+    background-color: rgba(60, 60, 60, 0.96); /* 悬停时进一步调亮 */
+    border-color: #0056b3;
+}
+
+#boomContainer {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+#boomContainer div {
+    margin-bottom: 10px;
+}
+
+#boomContainer img {
+    width: 150px;
+    height: auto;
+    border-radius: 15px; /* 圆角 */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+#boomContainer img:hover {
+    transform: scale(1.1); /* 悬停时微微放大 */
+}
+
+#message {
+    width: 80%;
+    max-width: 300px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    margin-top: 10px; /* 增加与图片的间距 */
+}
+
+#message:focus {
+    border-color: #007bff;
+}
+
+#timer, #count, #result {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.boom-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

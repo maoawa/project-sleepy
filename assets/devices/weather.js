@@ -1,21 +1,24 @@
 export function weather(data) {
-// 默认值和映射
+    // 默认值和映射
     const DEFAULT_WEATHER_STATE = '未知';
     const DEFAULT_ICON = 'fa-question';
     const DEFAULT_TEMPERATURE = '未知';
     const DEFAULT_HUMIDITY = '未知';
     const DEFAULT_WIND_SPEED = '未知';
 
+    // https://www.home-assistant.io/integrations/weather/
     const weatherIcons = {
         'clear-night': 'fa-moon',
         'cloudy': 'fa-cloud',
         'fog': 'fa-smog',
         'hail': 'fa-cloud-meatball',
         'lightning': 'fa-bolt',
+        'lightning-rainy': 'fa-cloud-bolt',
         'partlycloudy': 'fa-cloud-sun',
         'pouring': 'fa-cloud-showers-heavy',
         'rainy': 'fa-cloud-rain',
         'snowy': 'fa-snowflake',
+        'snowy-rainy': 'fa-snowflake',
         'sunny': 'fa-sun',
         'windy': 'fa-wind',
         'windy-variant': 'fa-cloud-wind',
@@ -23,16 +26,18 @@ export function weather(data) {
     };
 
     const weatherTranslations = {
-        'clear-night': '晴朗的夜晚',
+        'clear-night': '晴',
         'cloudy': '多云',
-        'fog': '有雾',
+        'fog': '雾',
         'hail': '冰雹',
         'lightning': '雷电',
+        'lightning-rainy': '雷雨',
         'partlycloudy': '局部多云',
-        'pouring': '倾盆大雨',
-        'rainy': '下雨',
-        'snowy': '下雪',
-        'sunny': '晴天',
+        'pouring': '大雨',
+        'rainy': '雨',
+        'snowy': '雪',
+        'snowy-rainy': '雨夹雪',
+        'sunny': '晴',
         'windy': '有风',
         'windy-variant': '多风',
         'exceptional': '特殊天气'

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
@@ -78,6 +78,57 @@
 
                 </h2>
             </div>
+
+            <div class="card">
+                <h2>提醒毛毛睡觉</h2>
+                <p>如果你发现毛毛大半夜还不睡觉，你可以使劲打他()<br>展开后可以先说些什么，然后计时五秒狂点"打卡成功!"</p>
+                <div id="boomContainer" style="display: none;">
+                    <div class="boom-wrapper">
+                        <img src="assets/images/boom.png" alt="Boom" onclick="handleClick()">
+                        <input type="text" id="message" placeholder="可以附上消息! (可选)" maxlength="256">
+                    </div>
+                    <div id="timer" style="display: none;">剩余时间: 5s</div>
+                    <div id="count" style="display: none;">点击次数: 0</div>
+                    <div id="result"></div>
+                </div>
+                <a id="toggleBoom" class="boom-button">展开</a>
+                <p>计时结束后，你暴打毛毛的次数和附言(如果有)将会被发送给毛毛<br>使用和请求这个功能即表示您同意<a href="boom/privacy-policy/" class="link">使用政策</a>。</p>
+            </div>
+            
+            <script> // 控制 boom 展开和折叠，并且在展开时加载 reCAPTCHA
+                document.getElementById("toggleBoom").addEventListener("click", function() {
+                    const container = document.getElementById("boomContainer");
+                    const toggleText = document.getElementById("toggleBoom");
+
+                    if (container.style.display === "none") {
+                        container.style.display = "block";
+                        toggleText.textContent = "折叠";
+                        loadBoomScripts();
+                    } else {
+                        container.style.display = "none";
+                        toggleText.textContent = "展开";
+                    }
+                });
+
+                function loadBoomScripts() {
+                    // 只加载一次，避免重复加载
+                    if (!document.getElementById("recaptchaScript")) {
+                        let recaptcha = document.createElement("script");
+                        recaptcha.id = "recaptchaScript";
+                        recaptcha.src = "https://recaptcha.net/recaptcha/api.js?render=6Ld0SNgqAAAAAJSHgR96yQysjWUPl_HASSj3SfY7";
+                        recaptcha.async = true;
+                        recaptcha.defer = true;
+                        document.head.appendChild(recaptcha);
+                    }
+
+                    if (!document.getElementById("boomScript")) {
+                        let script = document.createElement("script");
+                        script.id = "boomScript";
+                        script.src = "assets/boom.js";
+                        document.head.appendChild(script);
+                    }
+                }
+            </script>
 
             <div class="card">
                 <h3>

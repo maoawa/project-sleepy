@@ -2,7 +2,8 @@ let currentMedia = {
     title: null,
     artist: null,
     album: null,
-    app: null
+    app: null,
+    appID: null
 };
 
 export async function marsHomePod(data) {
@@ -11,10 +12,11 @@ export async function marsHomePod(data) {
     const homePodCoverContainer = homePodStateElement.parentNode; // 获取父容器
 
     if (homePodData) {
-        const mediaTitle = homePodData.media_title;
-        const mediaArtist = homePodData.media_artist || '未知艺术家';
-        const mediaAlbumName = homePodData.media_album_name || null; // 如果专辑名无效，设为 null
-        let appName = homePodData.app_name || '未知应用';
+        const mediaTitle = homePodData.media_title || null;
+        const mediaArtist = homePodData.media_artist || null;
+        const mediaAlbumName = homePodData.media_album_name || null;
+        let appName = homePodData.app_name || null;
+        const appID = homePodData.app_id || null;
 
         // 如果 appName 是 "Music"，替换为 "Apple Music"
         if (appName === 'Music') {
@@ -26,7 +28,8 @@ export async function marsHomePod(data) {
             currentMedia.title === mediaTitle &&
             currentMedia.artist === mediaArtist &&
             currentMedia.album === mediaAlbumName &&
-            currentMedia.app === appName
+            currentMedia.app === appName &&
+            currentMedia.appID === appID
         ) {
             return;
         }
@@ -36,15 +39,23 @@ export async function marsHomePod(data) {
             title: mediaTitle,
             artist: mediaArtist,
             album: mediaAlbumName,
-            app: appName
+            app: appName,
+            appID: appID
         };
 
         if (mediaTitle) {
-            let mediaInfo = `${mediaTitle}<br>${mediaArtist}`;
+            let mediaInfo = `${mediaTitle}`;
             if (mediaAlbumName) {
-                mediaInfo += ` - ${mediaAlbumName}`; // 仅当专辑名有效时添加
+                mediaInfo += `<br>${mediaAlbumName}`;
             }
-            mediaInfo += `<br>${appName}`;
+            if (mediaArtist) {
+                mediaInfo += `<br>${mediaArtist}`;
+            }
+            if (appName) {
+                mediaInfo += `<br>${appName}`;
+            } else if (appID) {
+                mediaInfo += `<br>${appID}`;
+            }
 
             homePodStateElement.innerHTML = mediaInfo;
 

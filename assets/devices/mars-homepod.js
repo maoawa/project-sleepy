@@ -18,8 +18,8 @@ export async function marsHomePod(data) {
         let appName = homePodData.app_name || null;
         const appID = homePodData.app_id || null;
 
-        // 如果 appName 是 "Music"，替换为 "Apple Music"
-        if (appName === 'Music') {
+        // 如果 appName 是 "Music" 或者 appID 是 "com.apple.Music"，替换为 "Apple Music"
+        if (appName === 'Music' || appID === 'com.apple.Music') {
             appName = '<i class="fa-brands fa-apple fa-xs"></i>Music';
         }
 
